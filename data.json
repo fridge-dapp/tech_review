@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "idToSet": "4",
+      "temperatureToSet": "11",
+      "humidityToSet": "54"
+    },
+    {
+      "idToSet": "4",
+      "temperatureToSet": "45",
+      "humidityToSet": "65"
+    },
+    {
+      "idToSet": "4",
+      "temperatureToSet": "56",
+      "humidityToSet": "68"
+    },
+    {
+      "idToSet": "4",
+      "temperatureToSet": "52",
+      "humidityToSet": "61"
+    }
+  ]
+}
