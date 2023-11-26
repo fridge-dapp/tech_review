@@ -1,6 +1,28 @@
 .App {
   text-align: center;
+  background-color: #f5f5f5;
+  font-family: Arial, sans-serif;
 }
+
+.app-info {
+  text-align: center;
+}
+
+.app-info h1 {
+  font-size: 55px;
+  margin-bottom: 5px;
+}
+
+.app-info h2 {
+  font-size: 28px;
+  color: #99bbdd;
+}
+
+/*
+.input-field input::placeholder {
+  text-align: center;
+}
+*/
 
 .App-header {
   background-color: #282c34;
@@ -11,4 +33,91 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.input-field {
+  margin: 2px 0;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 2px 0;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.message {
+  color: #6c757d;
+  font-size: 18px;
+}
+
+.data-container {
+  margin-top: 20px;
+}
+
+.date-header {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.item-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #99bbdd;
+  border-radius: 5px;
+  font-family: "Courier New", Courier, monospace;
+  width: 80%;
+}
+
+.item-container:hover {
+  background-color: #5588bb;
+}
+
+.temperature,
+.humidity {
+  flex: 1;
+  padding: 10px;
+  border-right: 1px solid #ccc;
+  word-wrap: break-word;
+}
+
+.temperature:last-child,
+.humidity:last-child {
+  border-right: none;
+}
+
+.temperature p,
+.humidity p {
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wallet-status {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  font-size: 14px;
+  background-color: #555;
+  border: 1px solid #ffffff; /* Add a border */
+  padding: 5px; /* Add padding for better appearance */
+  border-radius: 5px; /* Optional: Add border-radius for rounded corners */
 }
