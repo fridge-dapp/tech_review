@@ -1,24 +1,24 @@
 {
   "data": [
     {
-      "idToSet": "4",
-      "temperatureToSet": "11",
-      "humidityToSet": "54"
+      "idToSet": "10",
+      "temperatureToSet": "13",
+      "humidityToSet": "16"
     },
     {
-      "idToSet": "4",
-      "temperatureToSet": "45",
-      "humidityToSet": "65"
+      "idToSet": "10",
+      "temperatureToSet": "54",
+      "humidityToSet": "77"
     },
     {
-      "idToSet": "4",
-      "temperatureToSet": "56",
-      "humidityToSet": "68"
+      "idToSet": "10",
+      "temperatureToSet": "88",
+      "humidityToSet": "99"
     },
     {
-      "idToSet": "4",
-      "temperatureToSet": "52",
-      "humidityToSet": "61"
+      "idToSet": "10",
+      "temperatureToSet": "102",
+      "humidityToSet": "62"
     }
   ]
 }

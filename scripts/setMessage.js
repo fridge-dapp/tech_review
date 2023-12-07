@@ -17,22 +17,21 @@ const sendShieldedTransaction = async (signer, destination, data, value) => {
 };
 
 async function main() {
-  const contractAddress = "0x5F5A6bEeACeb44A13e609d396385033f458d45c5";
+  const contractAddress = "0x035c35f4cC4806Cc3FEbB16c0843eFfF761BbdC7";
   const [signer] = await hre.ethers.getSigners();
-  const contractFactory = await hre.ethers.getContractFactory("myFridge");
+  const contractFactory = await hre.ethers.getContractFactory("FridgeIPFS");
   const contract = contractFactory.attach(contractAddress);
   const functionName = "saveDataBatch";
 
   // Read data from JSON file
-  const data = fs.readFileSync("./data.json", "utf8");
+  const data = fs.readFileSync("./data-IPFS.json", "utf8");
   const jsonData = JSON.parse(data);
 
   // Prepare the array of data to be sent
   const dataToSend = jsonData.data.map((item) => {
     return {
       fridge_id: parseInt(item.idToSet),
-      temperature: parseInt(item.temperatureToSet),
-      humidity: parseInt(item.humidityToSet),
+      ipfsHash: item.url,
     };
   });
 
@@ -44,6 +43,7 @@ async function main() {
   );
   await setMessageTx.wait();
   console.log("Transaction Receipt: ", setMessageTx);
+  console.log("Transaction Hash: ", setMessageTx.hash);
 }
 
 main().catch((error) => {

@@ -18,12 +18,12 @@ const sendShieldedQuery = async (provider, destination, data) => {
 };
 
 async function main() {
-  const contractAddress = "0x5F5A6bEeACeb44A13e609d396385033f458d45c5";
+  const contractAddress = "0x035c35f4cC4806Cc3FEbB16c0843eFfF761BbdC7";
   const [signer] = await hre.ethers.getSigners();
-  const contractFactory = await hre.ethers.getContractFactory("myFridge");
+  const contractFactory = await hre.ethers.getContractFactory("FridgeIPFS");
   const contract = contractFactory.attach(contractAddress);
   const functionName = "getAllData";
-  const idToSet = "2";
+  const idToSet = "7";
 
   // Encode the function call
   const functionCallData = contract.interface.encodeFunctionData(functionName, [
@@ -45,9 +45,8 @@ async function main() {
 
   // Iterate through the array of SensorData
   for (const data of decodedResponse[0]) {
-    const temperature = Number(data.temperature);
-    const humidity = Number(data.humidity);
-    console.log("Temperature, humidity:", [temperature, humidity]);
+    const ipfsHash = data.ipfsHash;
+    console.log("ipfsHash:", [ipfsHash]);
   }
 }
 

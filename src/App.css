@@ -40,6 +40,8 @@
   padding: 10px;
   font-size: 16px;
   border-radius: 5px;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .button {
@@ -86,21 +88,19 @@
   background-color: #5588bb;
 }
 
-.temperature,
-.humidity {
+.ipfsHash {
   flex: 1;
   padding: 10px;
   border-right: 1px solid #ccc;
   word-wrap: break-word;
+  overflow: auto;
 }
 
-.temperature:last-child,
-.humidity:last-child {
+.ipfsHash:last-child {
   border-right: none;
 }
 
-.temperature p,
-.humidity p {
+.ipfsHash p {
   margin: 0;
 }
 

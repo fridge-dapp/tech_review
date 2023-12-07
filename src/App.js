@@ -1,13 +1,13 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import myFridge from "./artifacts/contracts/FridgeSensors.sol/myFridge.json";
+import FridgeIPFS from "./artifacts/contracts/FridgeSensorsIPFS.sol/FridgeIPFS.json";
 import {
   encryptDataField,
   decryptNodeResponse,
 } from "@swisstronik/swisstronik.js";
 
-const myContractAddress = "0x5F5A6bEeACeb44A13e609d396385033f458d45c5";
+const myContractAddress = "0x035c35f4cC4806Cc3FEbB16c0843eFfF761BbdC7";
 
 const sendShieldedQuery = async (provider, destination, data) => {
   const rpclink = "https://json-rpc.testnet.swisstronik.com/"; //URL of the RPC node for Swisstronik.
@@ -48,7 +48,7 @@ function App() {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const contract = new ethers.Contract(
         myContractAddress,
-        myFridge.abi,
+        FridgeIPFS.abi,
         provider
       );
 
@@ -81,8 +81,7 @@ function App() {
 
         return {
           date: formattedDate,
-          temperature: Number(item.temperature),
-          humidity: Number(item.humidity),
+          ipfsHash: item.ipfsHash,
         };
       });
 
@@ -119,8 +118,15 @@ function App() {
         <div className="input-field">
           <input
             type="number"
+            min="0"
             placeholder="Fridge Id"
-            onChange={(e) => setFridgeId(e.target.value)}
+            onChange={(e) => {
+              let value = e.target.value;
+              if (value < 0) {
+                value = 0;
+              }
+              setFridgeId(value);
+            }}
             className="input-field"
           />
         </div>
@@ -137,11 +143,8 @@ function App() {
               <div className="container">
                 {data.map((item, index) => (
                   <div key={index} className="item-container">
-                    <div className="temperature">
-                      <p>Temperature: {item.temperature}</p>
-                    </div>
-                    <div className="humidity">
-                      <p>Humidity: {item.humidity}</p>
+                    <div className="ipfsHash">
+                      <p>ipfsHash: {item.ipfsHash}</p>
                     </div>
                   </div>
                 ))}
@@ -158,7 +161,7 @@ export default App;
 
 /*
 
-// PREVIOUS CODE WITH NO WALLET ON THE TOP RIGHT
+// ------ PREVIOUS CODE WITH NO WALLET ON THE TOP RIGHT ------
 
 import "./App.css";
 import { useState } from "react";
