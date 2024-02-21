@@ -23,7 +23,7 @@ async function main() {
   const contractFactory = await hre.ethers.getContractFactory("FridgeIPFS");
   const contract = contractFactory.attach(contractAddress);
   const functionName = "getAllData";
-  const idToSet = "7";
+  const idToSet = "29";
 
   // Encode the function call
   const functionCallData = contract.interface.encodeFunctionData(functionName, [

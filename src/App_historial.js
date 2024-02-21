@@ -1,13 +1,13 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import myFridge from "./artifacts/contracts/FridgeSensors.sol/myFridge.json";
+import FridgeIPFS from "./artifacts/contracts/FridgeSensorsIPFS.sol/FridgeIPFS.json";
 import {
   encryptDataField,
   decryptNodeResponse,
 } from "@swisstronik/swisstronik.js";
 
-const myContractAddress = "0x5F5A6bEeACeb44A13e609d396385033f458d45c5";
+const myContractAddress = "0x035c35f4cC4806Cc3FEbB16c0843eFfF761BbdC7";
 
 const sendShieldedQuery = async (provider, destination, data) => {
   const rpclink = "https://json-rpc.testnet.swisstronik.com/"; //URL of the RPC node for Swisstronik.
@@ -26,6 +26,20 @@ function App() {
   const [fridgeId, setFridgeId] = useState(0);
   const [fridgeData, setFridgeData] = useState([]);
   const [buttonClicked, setButtonClicked] = useState(false);
+  const [walletAddress, setWalletAddress] = useState(null);
+
+  useEffect(() => {
+    const connectWallet = async () => {
+      if (typeof window.ethereum !== "undefined") {
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+
+        const address = window.ethereum.selectedAddress;
+        setWalletAddress(address);
+      }
+    };
+
+    connectWallet();
+  }, []);
 
   const fetchFridgeData = async () => {
     if (typeof window.ethereum !== "undefined") {
@@ -34,7 +48,7 @@ function App() {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const contract = new ethers.Contract(
         myContractAddress,
-        myFridge.abi,
+        FridgeIPFS.abi,
         provider
       );
 
@@ -67,8 +81,7 @@ function App() {
 
         return {
           date: formattedDate,
-          temperature: Number(item.temperature),
-          humidity: Number(item.humidity),
+          ipfsHash: item.ipfsHash,
         };
       });
 
@@ -90,27 +103,57 @@ function App() {
   return (
     <div className="App">
       <div className="App-header">
-        <h1>TFM Dapp</h1>
-        <input
-          type="number"
-          placeholder="Fridge Id"
-          onChange={(e) => setFridgeId(e.target.value)}
-        />
-        <button onClick={() => fetchFridgeData()}>
+        <div className="wallet-status">
+          <p>
+            Wallet Address:{" "}
+            {walletAddress
+              ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+              : "Not connected"}
+          </p>
+        </div>
+        <div className="app-info">
+          <h1>Fridge Data Dapp</h1>
+          <h2>Your Fridge, Your Data: Monitor with Confidence</h2>
+        </div>
+        <div className="input-field">
+          <input
+            type="number"
+            min="0"
+            placeholder="Fridge Id"
+            onChange={(e) => {
+              let value = e.target.value;
+              if (value < 0) {
+                value = 0;
+              }
+              setFridgeId(value);
+            }}
+            className="input-field"
+          />
+        </div>
+
+        <button onClick={() => fetchFridgeData()} className="button">
           Fetch the Fridge's Sensors History
         </button>
         {buttonClicked && Object.keys(fridgeData).length === 0 ? (
-          <p>This fridge has no data submitted yet.</p>
+          <p className="message">This fridge has no data submitted yet.</p>
         ) : (
           Object.entries(fridgeData).map(([date, data], index) => (
-            <div key={index}>
-              <h2>Date: {date}</h2>
-              {data.map((item, index) => (
-                <div key={index} className="item-container">
-                  <p>Temperature: {item.temperature}</p>
-                  <p>Humidity: {item.humidity}</p>
-                </div>
-              ))}
+            <div key={index} className="data-container">
+              <h2 className="date-header">Date: {date}</h2>
+              <div className="container">
+                {data.map((item, index) => (
+                  <div key={index} className="item-container">
+                    <div className="ipfsHash">
+                      <p>
+                        {item.ipfsHash.startsWith("https")
+                          ? "ipfsHash"
+                          : "Technical Support Summary"}
+                        : {item.ipfsHash}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           ))
         )}

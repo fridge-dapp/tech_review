@@ -1,10 +1,10 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import FridgeIPFS from "./artifacts/contracts/FridgeStringID.sol/FridgeStringID.json";
+import FridgeIPFS from "./artifacts/contracts/Fridge.sol/Fridge.json";
 import { encryptDataField } from "@swisstronik/swisstronik.js";
 
-const myContractAddress = "0x2faaDe45fB012Aa255Ba90483D7911dCF0343B9B";
+const myContractAddress = "0xd03a62F1A0Fff7E1d14d8c147129F0f605661b80";
 
 const sendShieldedTransaction = async (signer, destination, data, value) => {
   const rpclink = "https://json-rpc.testnet.swisstronik.com/";
@@ -19,7 +19,7 @@ const sendShieldedTransaction = async (signer, destination, data, value) => {
 };
 
 function App() {
-  const [fridgeId, setFridgeId] = useState("");
+  const [fridgeId, setFridgeId] = useState(0);
   const [tech_review, setReview] = useState("");
   const [walletAddress, setWalletAddress] = useState(null);
 
@@ -114,9 +114,14 @@ function App() {
         </div>
         <div className="input-field">
           <input
+            type="number"
+            min="0"
             placeholder="Fridge Id"
             onChange={(e) => {
               let value = e.target.value;
+              if (value < 0) {
+                value = 0;
+              }
               setFridgeId(value);
             }}
             className="input-field"

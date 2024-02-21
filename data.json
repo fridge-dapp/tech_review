@@ -1,22 +1,22 @@
 {
   "data": [
     {
-      "idToSet": "10",
-      "temperatureToSet": "13",
-      "humidityToSet": "16"
+      "idToSet": "30",
+      "temperatureToSet": "8",
+      "humidityToSet": "22"
     },
     {
-      "idToSet": "10",
+      "idToSet": "30",
       "temperatureToSet": "54",
       "humidityToSet": "77"
     },
     {
-      "idToSet": "10",
+      "idToSet": "30",
       "temperatureToSet": "88",
       "humidityToSet": "99"
     },
     {
-      "idToSet": "10",
+      "idToSet": "30",
       "temperatureToSet": "102",
       "humidityToSet": "62"
     }

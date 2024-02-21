@@ -8,6 +8,7 @@ const {
 const sendShieldedTransaction = async (signer, destination, data, value) => {
   const rpclink = hre.network.config.url;
   const [encryptedData] = await encryptDataField(rpclink, data);
+  console.log("SIGNER:", signer);
   return await signer.sendTransaction({
     from: signer.address,
     to: destination,
@@ -17,23 +18,21 @@ const sendShieldedTransaction = async (signer, destination, data, value) => {
 };
 
 async function main() {
-  const contractAddress = "0x035c35f4cC4806Cc3FEbB16c0843eFfF761BbdC7";
+  const contractAddress = "0x92059238078caD43e18299BdcE944029D7A03A32";
   const [signer] = await hre.ethers.getSigners();
-  const contractFactory = await hre.ethers.getContractFactory("FridgeIPFS");
+  const contractFactory = await hre.ethers.getContractFactory(
+    "FridgeIPFSOwner"
+  );
   const contract = contractFactory.attach(contractAddress);
   const functionName = "saveDataBatch";
 
-  // Read data from JSON file
-  const data = fs.readFileSync("./data-IPFS.json", "utf8");
-  const jsonData = JSON.parse(data);
-
-  // Prepare the array of data to be sent
-  const dataToSend = jsonData.data.map((item) => {
-    return {
-      fridge_id: parseInt(item.idToSet),
-      ipfsHash: item.url,
-    };
-  });
+  const dataToSend = [
+    {
+      fridge_id: 23,
+      uploader: signer.address, // New field to store the uploader's address
+      ipfsHash: "Revision hecha por wallet 0c",
+    },
+  ];
 
   const setMessageTx = await sendShieldedTransaction(
     signer,

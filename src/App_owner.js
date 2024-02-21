@@ -1,25 +1,32 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import FridgeIPFS from "./artifacts/contracts/FridgeStringID.sol/FridgeStringID.json";
+import FridgeIPFS from "./artifacts/contracts/FridgeSensorsIPFSOwner.sol/FridgeIPFSOwner.json";
 import { encryptDataField } from "@swisstronik/swisstronik.js";
 
-const myContractAddress = "0x2faaDe45fB012Aa255Ba90483D7911dCF0343B9B";
+const myContractAddress = "0x92059238078caD43e18299BdcE944029D7A03A32";
 
 const sendShieldedTransaction = async (signer, destination, data, value) => {
-  const rpclink = "https://json-rpc.testnet.swisstronik.com/";
+  const rpclink = "https://json-rpc.testnet.swisstronik.com/"; //URL of the RPC node for Swisstronik.
   const [encryptedData] = await encryptDataField(rpclink, data);
-
-  return await signer.sendTransaction({
-    from: signer.address,
-    to: destination,
-    data: encryptedData,
-    value,
-  });
+  console.log(signer);
+  try {
+    return await signer.sendTransaction({
+      from: signer.address,
+      to: destination,
+      data: encryptedData,
+      value,
+    });
+  } catch (error) {
+    console.error(
+      "There was a problem with the transaction. Try doing the transaction again.",
+      error
+    );
+  }
 };
 
 function App() {
-  const [fridgeId, setFridgeId] = useState("");
+  const [fridgeId, setFridgeId] = useState(0);
   const [tech_review, setReview] = useState("");
   const [walletAddress, setWalletAddress] = useState(null);
 
@@ -27,6 +34,7 @@ function App() {
     const connectWallet = async () => {
       if (typeof window.ethereum !== "undefined") {
         await window.ethereum.request({ method: "eth_requestAccounts" });
+
         const address = window.ethereum.selectedAddress;
         setWalletAddress(address);
       }
@@ -53,47 +61,24 @@ function App() {
         const dataToSend = [
           {
             fridge_id: fridgeId,
-            timestamp: Math.floor(new Date().getTime() / 1000),
             uploader: signer.address,
-            ipfsHash: tech_review,
-            txHash: "Filler hash for the first transaction",
+            ipfsHash: tech_review, //"En la revisión se ha cambiado el condensador. Fecha: 12/12/2023."
           },
         ];
-
-        let int = contract.interface.encodeFunctionData(functionName, [
-          dataToSend,
-        ]);
 
         const setMessageTx = await sendShieldedTransaction(
           signer,
           myContractAddress,
-          int,
+          contract.interface.encodeFunctionData(functionName, [dataToSend]),
           0
         );
         await setMessageTx.wait();
-
-        const dataToSendTxHash = [
-          {
-            fridge_id: fridgeId,
-            timestamp: Math.floor(new Date().getTime() / 1000),
-            uploader: signer.address,
-            ipfsHash: tech_review,
-            txHash: setMessageTx.hash,
-          },
-        ];
-
-        const setMessageTxHash = await sendShieldedTransaction(
-          signer,
-          myContractAddress,
-          contract.interface.encodeFunctionData(functionName, [
-            dataToSendTxHash,
-          ]),
-          0
-        );
-        await setMessageTxHash.wait();
       }
     } catch (error) {
-      console.error("Error submitting fridge data:", error);
+      console.error(
+        "There was a problem with the transaction. Try doing the transaction again.",
+        error
+      );
     }
   };
 
@@ -114,9 +99,14 @@ function App() {
         </div>
         <div className="input-field">
           <input
+            type="number"
+            min="0"
             placeholder="Fridge Id"
             onChange={(e) => {
               let value = e.target.value;
+              if (value < 0) {
+                value = 0;
+              }
               setFridgeId(value);
             }}
             className="input-field"
@@ -133,7 +123,18 @@ function App() {
             className="input-field"
           />
         </div>
-        <button onClick={() => submitFridgeData()} className="button">
+        <button
+          onClick={() => {
+            try {
+              submitFridgeData();
+            } catch (error) {
+              alert(
+                "There was a problem with the transaction. Try doing the transaction again."
+              );
+            }
+          }}
+          className="button"
+        >
           Submit Data to the Blockchain
         </button>
       </div>
